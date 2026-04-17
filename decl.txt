@@ -1,0 +1,37 @@
+AI Usage Declaration — PA4: Beat the Interpreter
+==================================================
+
+I used an AI assistant (Claude, Anthropic) during this assignment in the
+following capacities:
+
+ALLOWED USES (per Section 6 of the specification):
+---------------------------------------------------
+1. Learning Soot APIs
+   - Used AI to look up and understand Soot's BodyTransformer, PackManager,
+     Scene, CallGraph, PatchingChain, Jimple builder APIs, and the
+     ForwardFlowAnalysis framework.
+   - Used AI to understand the difference between VirtualInvokeExpr,
+     StaticInvokeExpr, SpecialInvokeExpr, and InterfaceInvokeExpr in Jimple.
+
+2. Debugging help
+   - Used AI to reason through edge cases in the inliner's local-remapping
+     logic (IdentityStmt handling, ReturnStmt replacement with Goto).
+   - Used AI to understand how Soot's PatchingChain handles in-place
+     statement replacement without iterator invalidation.
+
+3. Report structuring
+   - Used AI to suggest the report outline and section ordering.
+   - The textual content, analysis descriptions, and design decisions are
+     my own and reflect my understanding of the material.
+
+NOT USED FOR (per Section 6 restrictions):
+------------------------------------------
+- The core optimization logic (analysis design, transformation correctness
+  arguments, kill/gen rules) was designed and implemented by me.
+- The report was written by me; AI was not used to generate report prose.
+- I understand every line of code submitted and can explain/extend it
+  during a viva.
+
+Tools used:
+  - Claude (claude.ai) for API lookups and debugging discussion
+  - No code was copied verbatim from AI output without understanding it first.
