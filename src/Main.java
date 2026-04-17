@@ -6,9 +6,11 @@ import java.io.File;
 /**
  * PA4: Beat the Interpreter
  * Optimizations:
- *   1. Monomorphization  – virtual calls → static dispatch (single-target sites)
- *   2. Method Inlining   – inline small methods after monomorphization
- *   3. Redundant Load Elimination – remove repeated field loads with no intervening store
+ *   1. Monomorphization          – virtual calls → static dispatch (single-target sites)
+ *   2. Method Inlining           – inline small methods after monomorphization
+ *   3. Redundant Load Elimination– remove repeated field loads with no intervening store
+ *   4. Null-Check Elimination    – remove provably redundant null guards
+ *   5. Dead Field Elimination    – remove stores to fields never subsequently read
  */
 public class Main {
 
@@ -29,13 +31,19 @@ public class Main {
 
         configureSoot(classDir, mainClass, outDir);
 
-        // Register our three transformation passes (in order)
+        // Register all five transformation passes (in order)
+        // Order matters: mono fires first to open inlining opportunities;
+        // null-check and dead-field elimination run last on the cleaned-up body.
         PackManager.v().getPack("jtp").add(
-            new Transform("jtp.mono",  new MonomorphizationTransformer()));
+            new Transform("jtp.mono",      new MonomorphizationTransformer()));
         PackManager.v().getPack("jtp").add(
-            new Transform("jtp.inline", new MethodInliningTransformer()));
+            new Transform("jtp.inline",    new MethodInliningTransformer()));
         PackManager.v().getPack("jtp").add(
-            new Transform("jtp.rle",   new RedundantLoadEliminationTransformer()));
+            new Transform("jtp.rle",       new RedundantLoadEliminationTransformer()));
+        PackManager.v().getPack("jtp").add(
+            new Transform("jtp.nullelim",  new NullCheckEliminationTransformer()));
+        PackManager.v().getPack("jtp").add(
+            new Transform("jtp.deadfield", new DeadFieldEliminationTransformer()));
 
         PackManager.v().runPacks();
         PackManager.v().writeOutput();
@@ -58,9 +66,6 @@ public class Main {
         opt.set_process_dir(Collections.singletonList(classDir));
         opt.set_output_dir(outDir);
         opt.set_output_format(Options.output_format_class);
-
-        // Use Jimple IR
-        // opt.set_via_jimple(true);
 
         // Call-graph construction (CHA gives us the type hierarchy)
         opt.setPhaseOption("cg.cha", "enabled:true");

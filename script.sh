@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PA4 – Beat the Interpreter
 # Usage: bash script.sh
-# Requires: lib/soot-4.6.0-jar-with-dependencies.jar    to be present
+# Requires: lib/soot.jar to be present
 
 set -e
 
@@ -16,7 +16,7 @@ RT=$(java -XshowSettings:all -version 2>&1 | grep "java.home" | awk '{print $3}'
 
 # ─── 0. Sanity checks ───────────────────────────────────────────────────────
 if [ ! -f "$LIB" ]; then
-  echo "[ERROR] lib/soot-4.6.0-jar-with-dependencies.jar    not found."
+  echo "[ERROR] lib/soot.jar not found."
   echo "        Download from: https://github.com/soot-oss/soot/releases"
   echo "        and place at:  $LIB"
   exit 1
@@ -39,8 +39,10 @@ echo ""
 echo "[Step 2] Compiling optimizer source..."
 javac -cp "$LIB" -d "$BUILD" \
   "$SRC/MonomorphizationTransformer.java" \
-  "$SRC/RedundantLoadEliminationTransformer.java" \
   "$SRC/MethodInliningTransformer.java" \
+  "$SRC/RedundantLoadEliminationTransformer.java" \
+  "$SRC/NullCheckEliminationTransformer.java" \
+  "$SRC/DeadFieldEliminationTransformer.java" \
   "$SRC/Main.java"
 echo "         Compiled to: $BUILD"
 
@@ -59,7 +61,7 @@ print_header() {
 
 print_header
 
-for i in $(seq 1 10); do
+for i in $(seq 1 14); do
   TESTFILE="$TESTS/Test${i}.java"
   if [ ! -f "$TESTFILE" ]; then
     echo "  [SKIP] Test${i}.java not found"
