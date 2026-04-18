@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PA4 – Beat the Interpreter
 # Usage: bash script.sh
-# Requires: lib/soot.jar to be present
+# Requires: lib/soot-4.6.0-jar-with-dependencies.jar to be present
 
 set -e
 
@@ -16,7 +16,7 @@ RT=$(java -XshowSettings:all -version 2>&1 | grep "java.home" | awk '{print $3}'
 
 # ─── 0. Sanity checks ───────────────────────────────────────────────────────
 if [ ! -f "$LIB" ]; then
-  echo "[ERROR] lib/soot.jar not found."
+  echo "[ERROR] lib/soot-4.6.0-jar-with-dependencies.jar not found."
   echo "        Download from: https://github.com/soot-oss/soot/releases"
   echo "        and place at:  $LIB"
   exit 1
