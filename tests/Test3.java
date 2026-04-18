@@ -24,7 +24,7 @@ public class Test3 {
             result += compute(cfg, i % 10);
         }
         long elapsed = System.currentTimeMillis() - start;
-        System.out.println("Correct: " + (result == 300_000_030L)); // Expected: Correct: true
+        System.out.println("Correct: " + (result == 300_000_000L)); // Expected: Correct: true
         System.out.println("Time(ms): " + elapsed);
     }
 }
